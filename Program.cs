@@ -9,7 +9,7 @@ DataBaseControllers CRUD = new();
 bool menu = true;
 while (menu)
 {
-	Console.WriteLine("==== Sport's equipment library ====\nActive User:ADMIN\n\n1. Register a donated item(Add a new product)\n2. Show all items.\n3. Find a specific equipment.\n4. Lend an equipment(Update a product information)." +
+	Console.WriteLine("==== Sport's equipment library ====\nActive User:ADMIN\n\n1. Register a donated item(Add a new product)\n2. Show all items.\n3. Find a specific equipment.\n4. Change status of equipment(available or borrowed)." +
 		"\n5. Erase item from database.\n6. Exit program.\nPlease select one of the alternatives:");
 	Console.Write(">");
 	int input = CRUD.CheckNumberInput();
@@ -25,10 +25,10 @@ while (menu)
 			CRUD.FindProduct(collection);
 			break;
 		case 4:
-			Console.WriteLine(4);
+			CRUD.LendOrReturnequipment(collection);
 			break;
 		case 5:
-			Console.WriteLine(5);
+			CRUD.DeleteEquipment(collection);
 			break;
 		case 6:
 			menu = false;
@@ -76,14 +76,14 @@ public class DataBaseControllers
 	}
 	public void FindProduct(IMongoCollection<BsonDocument> dbCollection)
 	{
-		Console.WriteLine("Please add all necessary info to create a filter. \nFirst write down what kind of information should program use to filter the results?");
+		Console.WriteLine("Please add all necessary info to create a filter. \nFirst write down what kind of information should program use to filter the results?\nChoose one of the following: name, shelf, description, is available.");
 		string filterDefinition = CheckLetterInput();
 		Console.WriteLine("Please write down specific information which fits chosen filter:");
 		string filterValue = CheckLetterInput();
 		var filter = Builders<BsonDocument>.Filter.Eq($"{filterDefinition}", $"{filterValue}");
 		var SportsEquipmentFilter = dbCollection.Find(filter).FirstOrDefault();
-		if (SportsEquipmentFilter != null)                              //om man gav felaktig info till filterDefinition eller/och filterValue programmet crashade. Jag löste problemet med if sats (SportsEquipmentFilter !=null) eftersom try-catch
-		{                                                               //hjälpte inte - programmet crashade med meddelande att sportsequipmentfilter blir null. 
+		if (SportsEquipmentFilter != null)
+		{
 			Console.WriteLine(SportsEquipmentFilter.ToString());
 		}
 		else
@@ -91,13 +91,50 @@ public class DataBaseControllers
 			Console.WriteLine("Sorry, it is impossible to  find any products with provided information!\n");
 		}
 	}
-	public void UpdateProduct()
+	public void LendOrReturnequipment(IMongoCollection<BsonDocument> dbCollection)
 	{
-		//would you like to (B)orrow or (R)eturn equipment? b/r?
-	//is available - yes or borrowed
+		Console.WriteLine("Press \"1\" to lend or \"2\" to register return of an equipment.");
+		int input = 0;
+		string choice = "";
+		string availability = "";
+		while (input < 1 || input > 2)
+		{
+			input = CheckNumberInput();
+			if (input == 1)
+			{
+				choice = "lend";
+				availability = "borrowed";
+			}
+			else if (input == 2) 
+			{
+				choice = "return";
+				availability = "yes";
+			}
+			else
+			{
+				Console.WriteLine("Wrong choice! Try writing \"1\" or \"2\"");
+			}
+		}
+		Console.WriteLine($"Your Choice: {choice}");
+		Console.WriteLine($"\nPlease write name of the equipment?");
+		string name = CheckLetterInput();
+		Console.WriteLine($"\nPlease write equipments location(shelf ID)?");
+		string location = CheckLetterInput();
+		var builder = Builders<BsonDocument>.Filter;
+		var filter = builder.Eq("name", $"{name}") & builder.Eq("shelf", $"{location}");
+		var update = Builders<BsonDocument>.Update.Set("is available", $"{availability}");
+		dbCollection.UpdateOne(filter, update);
 	}
-	public void DeleteProduct()
-	{ }
+	public void DeleteEquipment(IMongoCollection<BsonDocument> dbCollection)
+	{
+		Console.WriteLine($"\nPlease write name of the equipment?");
+		string name = CheckLetterInput();
+		Console.WriteLine($"\nPlease write equipments location(shelf ID)?");
+		string location = CheckLetterInput();
+		var builder = Builders<BsonDocument>.Filter;
+		var deleteFilter = builder.Eq("name", $"{name}") & builder.Eq("shelf", $"{location}");
+		dbCollection.DeleteOne(deleteFilter);
+	}
 	//en metod för att kolla om användaren skriver minst en tecken
 	public string CheckLetterInput()
 	{
@@ -142,5 +179,5 @@ public class Product
 	public string shelfID { get; set; }
 	public string Name { get; set; }
 	public string Description { get; set; }
-	public string Availability { get; set; } //bool?
+	public string Availability { get; set; }
 }
