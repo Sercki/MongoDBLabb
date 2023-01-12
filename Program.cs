@@ -118,7 +118,7 @@ public class DataBaseControllers
 		Console.WriteLine($"Your Choice: {choice}");
 		Console.WriteLine($"\nPlease write name of the equipment?");
 		string name = CheckLetterInput();
-		Console.WriteLine($"\nPlease write equipments location(shelf ID)?");
+		Console.WriteLine($"Please write equipments location(shelf ID)?");
 		string location = CheckLetterInput();
 		var builder = Builders<BsonDocument>.Filter;
 		var filter = builder.Eq("name", $"{name}") & builder.Eq("shelf", $"{location}");
@@ -129,7 +129,7 @@ public class DataBaseControllers
 	{
 		Console.WriteLine($"\nPlease write name of the equipment?");
 		string name = CheckLetterInput();
-		Console.WriteLine($"\nPlease write equipments location(shelf ID)?");
+		Console.WriteLine($"Please write equipments location(shelf ID)?");
 		string location = CheckLetterInput();
 		var builder = Builders<BsonDocument>.Filter;
 		var deleteFilter = builder.Eq("name", $"{name}") & builder.Eq("shelf", $"{location}");
