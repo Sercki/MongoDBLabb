@@ -56,7 +56,7 @@ public class DataBaseControllers
 		string description = CheckLetterInput();
 		var document = new BsonDocument
 		{
-			{"shelf", $"{shelfID}" },
+			{"shelf", $"{shelfID}" },			//like index. every equipment has its own shelf id - imagine shelf A with hooks 1,2,3,4 etc..., shelf b with compartments 1,2,3,4 etc... No two equipments on occupy same hook/compartment
 			{"name", $"{name}" },
 			{"description", $"{description}" },
 			{"is available", $"{isAvailable}"  }
@@ -74,7 +74,7 @@ public class DataBaseControllers
 		}
 		Console.WriteLine("");
 	}
-	public void FindProduct(IMongoCollection<BsonDocument> dbCollection)
+	public void FindProduct(IMongoCollection<BsonDocument> dbCollection)    //zmienić by prosić tylko o shelf ID
 	{
 		Console.WriteLine("Please add all necessary info to create a filter. \nFirst write down what kind of information should program use to filter the results?\nChoose one of the following: name, shelf, description, is available.");
 		string filterDefinition = CheckLetterInput();
@@ -90,8 +90,8 @@ public class DataBaseControllers
 		{
 			Console.WriteLine("Sorry, it is impossible to  find any products with provided information!\n");
 		}
-	}
-	public void LendOrReturnequipment(IMongoCollection<BsonDocument> dbCollection)
+	}	
+	public void LendOrReturnequipment(IMongoCollection<BsonDocument> dbCollection)                      //zmienić by prosić tylko o shelf ID
 	{
 		Console.WriteLine("Press \"1\" to lend or \"2\" to register return of an equipment.");
 		int input = 0;
@@ -125,7 +125,7 @@ public class DataBaseControllers
 		var update = Builders<BsonDocument>.Update.Set("is available", $"{availability}");
 		dbCollection.UpdateOne(filter, update);
 	}
-	public void DeleteEquipment(IMongoCollection<BsonDocument> dbCollection)
+	public void DeleteEquipment(IMongoCollection<BsonDocument> dbCollection)                             //zmienić by prosić tylko o shelf ID
 	{
 		Console.WriteLine($"\nPlease write name of the equipment?");
 		string name = CheckLetterInput();
