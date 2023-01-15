@@ -2,23 +2,23 @@
 internal class InventoryController
 {
 	IStringIO io;
-	IProductDAO productDAO;
-	public InventoryController(IStringIO io, IProductDAO productDAO)
+	IEquipmentDAO itemDAO;
+	public InventoryController(IStringIO io, IEquipmentDAO itemDAO)
 	{
 		this.io = io;
-		this.productDAO = productDAO;
+		this.itemDAO = itemDAO;
 	}
 
 	public void Start()
 	{
 		//loop
-		productDAO.GetAllProducts().ForEach(product => { io.PrintString(product); });
+		itemDAO.GetAllItems().ForEach(product => { io.PrintString(product); });
 
 		string title;
 		string description;
 		int amount;
 		//lägga till
-		productDAO.CreateProduct();
+		itemDAO.CreateItem();
 	}
 	private int GameMenu()  //główne menu
 	{

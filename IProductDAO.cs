@@ -1,12 +1,12 @@
 ﻿
-	internal interface IProductDAO //här CRUD
+	internal interface IEquipmentDAO //här CRUD
 	{
-	public List<string> GetAllProducts();
+	public List<string> GetAllItems();
 
-	public void CreateProduct();
+	public void CreateItem();
 
-	public void UpdateProduct();
+	public void UpdateItem();
 
-	public void DeleteProduct();
+	public void DeleteItem();
 	}
 

@@ -1,11 +1,11 @@
 ﻿
 IStringIO io; //albo IUI (interface UI) interface för string input output- min UI
-IProductDAO productDAO; // database access object - min database 
+IEquipmentDAO itemDAO; // database access object - min database 
 
-io = new TraditionalTextIO();	//välj en implementation av IO/UI
-productDAO = new MongoDAO("connectionString", "databasewithproducts");	//välj en implementation av DAO
+io = new TraditionalTextIO();   //välj en implementation av IO/UI
+itemDAO = new MongoDAO("connectionString", "databasewithproducts");	//välj en implementation av DAO
 
-InventoryController controller = new InventoryController(io, productDAO);//hanterar inventory med massa produkter  (koppla allting)
+InventoryController controller = new InventoryController(io, ItemDAO);//hanterar inventory med massa produkter  (koppla allting)
 controller.Start();														//starta programmet
 
 

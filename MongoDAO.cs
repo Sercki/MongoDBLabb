@@ -1,9 +1,9 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Bson;
 
-internal class MongoDAO : IProductDAO
+internal class MongoDAO : IEquipmentDAO
 {
-	MongoClient dbClient;	//nieważne teraz
+	MongoClient dbClient;
 	IMongoDatabase database;
 
 	public MongoDAO(string connectionString, string database)
@@ -12,22 +12,22 @@ internal class MongoDAO : IProductDAO
 		this.database = this.dbClient.GetDatabase(database);
 	}
 
-	public void CreateProduct()
+	public void CreateItem()
 	{
 		throw new NotImplementedException();
 	}
 
-	public void DeleteProduct()
+	public void DeleteItem()
 	{
 		throw new NotImplementedException();
 	}
 
-	public List<string> GetAllProducts()
+	public List<string> GetAllItems()
 	{
 		throw new NotImplementedException();
 	}
 
-	public void UpdateProduct()
+	public void UpdateItem()
 	{
 		throw new NotImplementedException();
 	}
