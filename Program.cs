@@ -1,21 +1,19 @@
-﻿
+﻿global using MongoDB.Driver;
+global using MongoDB.Bson;
+using System.IO;
+
+
 IStringIO io; //albo IUI (interface UI) interface för string input output- min UI
 IEquipmentDAO itemDAO; // database access object - min database 
+string connectionString = ConnectionString.ConnectionStr;
 
 io = new TraditionalTextIO();   //välj en implementation av IO/UI
-itemDAO = new MongoDAO("connectionString", "databasewithproducts");	//välj en implementation av DAO
+itemDAO = new MongoDAO(connectionString, "MongoDBLabb", "Sport Equipment");	//välj en implementation av DAO
 
-InventoryController controller = new InventoryController(io, ItemDAO);//hanterar inventory med massa produkter  (koppla allting)
-controller.Start();														//starta programmet
+InventoryController controller = new InventoryController(io, itemDAO);//hanterar inventory med massa produkter  (koppla allting)
+controller.Start();                                                     //starta programmet
 
-
-//using MongoDB.Driver;
-//using MongoDB.Bson;
-//using System.IO;
-
-//var client = new MongoClient(ConnectionString.ConnectionStr);
-//var database = client.GetDatabase("MongoDBLabb");
-//var collection = database.GetCollection<BsonDocument>("Sport Equipment");
+//
 //DataBaseControllers CRUD = new();
 //bool menu = true;
 //while (menu)
@@ -72,13 +70,17 @@ controller.Start();														//starta programmet
 //			{"description", $"{description}" },
 //			{"is available", $"{isAvailable}"  }
 //		};
+//---------------zostalo uzyte----------------------
 //		dbCollection.InsertOne(document);
+//---------------zostalo uzyte----------------------
 //		Console.WriteLine($"shelf: {shelfID}\nname: {name}\ndescription: {description}\navailable: {isAvailable}");
 //		Console.WriteLine("Sport equipment was succesfully added!");
 //	}
 //	public void ShowAll(IMongoCollection<BsonDocument> dbCollection)
 //	{
+//---------------zostalo uzyte----------------------
 //		var SportEquipment = dbCollection.Find(new BsonDocument()).ToList();
+//---------------zostalo uzyte----------------------
 //		foreach (var item in SportEquipment)
 //		{
 //			Console.WriteLine(item);
@@ -102,7 +104,7 @@ controller.Start();														//starta programmet
 //			Console.WriteLine("Sorry, it is impossible to  find any products with provided information!\n");
 //		}
 //	}	
-//	public void LendOrReturnequipment(IMongoCollection<BsonDocument> dbCollection)                      //zmienić by prosić tylko o shelf ID
+//	public void LendOrReturnequipment(IMongoCollection<BsonDocument> dbCollection) 
 //	{
 //		Console.WriteLine("Press \"1\" to lend or \"2\" to register return of an equipment.");
 //		int input = 0;
@@ -127,63 +129,24 @@ controller.Start();														//starta programmet
 //			}
 //		}
 //		Console.WriteLine($"Your Choice: {choice}");
-//		Console.WriteLine($"\nPlease write name of the equipment?");
-//		string name = CheckLetterInput();
+//		
 //		Console.WriteLine($"Please write equipments location(shelf ID)?");
 //		string location = CheckLetterInput();
-//		var builder = Builders<BsonDocument>.Filter;
-//		var filter = builder.Eq("name", $"{name}") & builder.Eq("shelf", $"{location}");
+//---------------zostalo uzyte----------------------
+//		var filter = Builders<BsonDocument>.Filter.Eq("shelf", $"{location}");
 //		var update = Builders<BsonDocument>.Update.Set("is available", $"{availability}");
 //		dbCollection.UpdateOne(filter, update);
+//---------------zostalo uzyte----------------------
 //	}
-//	public void DeleteEquipment(IMongoCollection<BsonDocument> dbCollection)                             //zmienić by prosić tylko o shelf ID
+//	public void DeleteEquipment(IMongoCollection<BsonDocument> dbCollection)     
 //	{
-//		Console.WriteLine($"\nPlease write name of the equipment?");
-//		string name = CheckLetterInput();
 //		Console.WriteLine($"Please write equipments location(shelf ID)?");
 //		string location = CheckLetterInput();
-//		var builder = Builders<BsonDocument>.Filter;
-//		var deleteFilter = builder.Eq("name", $"{name}") & builder.Eq("shelf", $"{location}");
+//---------------zostalo uzyte----------------------
+//		var deleteFilter = Builders<BsonDocument>.Filter.Eq("shelf", $"{location}");
 //		dbCollection.DeleteOne(deleteFilter);
-//	}
-//	//en metod för att kolla om användaren skriver minst en tecken
-//	public string CheckLetterInput()
-//	{
-//		bool check = true;
-//		string textInput = "";
-//		while (check)
-//		{
-//			textInput = Console.ReadLine();
-//			if (textInput == "")
-//			{
-//				Console.WriteLine("Sorry! You wrote nothing here. Please add at least one symbol.Try again!");
-//			}
-//			else
-//			{
-//				check = false;
-//			}
-//		}
-//		return textInput;
-//	}
-//	//en metod fär att kolla om användaren skriver siffror
-//	public int CheckNumberInput()
-//	{
-//		bool checkIfNumberInput = false;
-//		int value = -1;
-//		while (checkIfNumberInput == false)
-//		{
-//			bool checkInput = int.TryParse(Console.ReadLine(), out value);
-//			if (checkInput == false)
-//			{
-//				Console.WriteLine("Wrong input! Write just numbers please:");
-//			}
-//			else
-//			{
-//				checkIfNumberInput = true;
-//			}
-//		}
-//		return value;
-//	}
+//---------------zostalo uzyte----------------------
+//	}	
 //}
 //public class Product
 //{

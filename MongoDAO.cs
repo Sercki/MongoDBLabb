@@ -1,35 +1,46 @@
 ﻿using MongoDB.Driver;
-using MongoDB.Bson;
+using System.Reflection.Metadata;
 
 internal class MongoDAO : IEquipmentDAO
 {
 	MongoClient dbClient;
 	IMongoDatabase database;
+	IMongoCollection<BsonDocument> collection;
 
-	public MongoDAO(string connectionString, string database)
+	public MongoDAO(string connectionString, string database, string collection)
 	{
 		this.dbClient = new MongoClient(connectionString); 
 		this.database = this.dbClient.GetDatabase(database);
+		this.collection = this.database.GetCollection<BsonDocument>(collection);
 	}
 
-	public void CreateItem()
+	public void CreateItem(BsonDocument document)
 	{
-		throw new NotImplementedException();
+		collection.InsertOne(document);
 	}
 
-	public void DeleteItem()
+	public void DeleteItem(string filterDefinition, string filterValue)
 	{
-		throw new NotImplementedException();
+		var deleteFilter = Builders<BsonDocument>.Filter.Eq(filterDefinition, filterValue);
+		collection.DeleteOne(deleteFilter);
 	}
 
-	public List<string> GetAllItems()
+	public List<BsonDocument> GetAllItems()
 	{
-		throw new NotImplementedException();
+		return collection.Find(new BsonDocument()).ToList();
 	}
 
-	public void UpdateItem()
+	public List<BsonDocument> GetAllItemsWithFilter(string filterDefinition, string filterValue)
 	{
-		throw new NotImplementedException();
+		var GetAllItemsFilter = Builders<BsonDocument>.Filter.Eq(filterDefinition, filterValue);
+		return collection.Find(GetAllItemsFilter).ToList();
+	}
+
+	public void UpdateItem(string filterDefinition, string filterValue, string setDefinition, string setValue)
+	{
+	var filter = Builders<BsonDocument>.Filter.Eq(filterDefinition, filterValue);
+	var update = Builders<BsonDocument>.Update.Set(setDefinition, setValue);
+	collection.UpdateOne(filter, update);
 	}
 }
 
