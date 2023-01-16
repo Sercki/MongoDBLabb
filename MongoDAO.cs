@@ -19,15 +19,9 @@ internal class MongoDAO : IEquipmentDAO
 		collection.InsertOne(document);
 	}
 
-	public void DeleteItem(string filterDefinition, string filterValue)
-	{
-		var deleteFilter = Builders<BsonDocument>.Filter.Eq(filterDefinition, filterValue);
-		collection.DeleteOne(deleteFilter);
-	}
-
-	public List<BsonDocument> GetAllItems()
-	{
-		return collection.Find(new BsonDocument()).ToList();
+	public List<BsonDocument> GetAllItems()  //verkar lättare och mer lättläst att ha båda GetAllItems och GetAllItemsWithFilter, än att skapa en metod med båda funktioner
+	{		
+		return collection.Find(new BsonDocument()).ToList();		
 	}
 
 	public List<BsonDocument> GetAllItemsWithFilter(string filterDefinition, string filterValue)
@@ -41,6 +35,12 @@ internal class MongoDAO : IEquipmentDAO
 	var filter = Builders<BsonDocument>.Filter.Eq(filterDefinition, filterValue);
 	var update = Builders<BsonDocument>.Update.Set(setDefinition, setValue);
 	collection.UpdateOne(filter, update);
+	}
+
+	public void DeleteItem(string filterDefinition, string filterValue)
+	{
+		var deleteFilter = Builders<BsonDocument>.Filter.Eq(filterDefinition, filterValue);
+		collection.DeleteOne(deleteFilter);
 	}
 }
 

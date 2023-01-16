@@ -15,7 +15,7 @@ internal class TraditionalTextIO : IStringIO
 	{                                       //en metod för att kolla om användaren skriver minst en tecken
 		bool check = true;
 		string textInput = "";
-		while (check)
+		while (check == true)
 		{
 			textInput = Console.ReadLine();
 			if (textInput == "")
@@ -47,7 +47,6 @@ internal class TraditionalTextIO : IStringIO
 		//		return value;
 		//	}
 	}
-
 	public void PrintString(string output)
 	{
 		Console.WriteLine(output);
