@@ -17,8 +17,8 @@
 	}
 	private void MainMenu()
 	{
-		io.PrintString("==== Sport's equipment library ====\nActive User:ADMIN\n\n1. Register a donated item(Add a new product)\n2. Show all items.\n3. Show all items of one type\n4. Change status of equipment(available or borrowed)." +
-			"\n5. Erase item from database.\n6. Exit program.\nPlease select one of the alternatives:");
+		io.PrintString("==== Sport's equipment library ====\nActive User:ADMIN\n\n1. Register a donated item(Add a new product)\n2. Show all items\n3. Show all items of one type\n4. Change status of equipment(available or borrowed)" +
+			"\n5. Erase item from database\n6. Exit program\nPlease select one of the alternatives:");
 		bool success = int.TryParse(io.GetString(), out int input);                                     
 		if (success == true)
 		{
