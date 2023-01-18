@@ -1,5 +1,4 @@
-﻿
-internal interface IEquipmentDAO
+﻿internal interface IEquipmentDAO
 	{
 	public List<BsonDocument> GetAllItems();
 

@@ -1,7 +1,4 @@
-﻿using MongoDB.Driver;
-using System.Reflection.Metadata;
-
-internal class MongoDAO : IEquipmentDAO
+﻿internal class MongoDAO : IEquipmentDAO					//försökte göra metoder generella, som man kan använda senare i ett annat program/ annan implementation av program
 {
 	MongoClient dbClient;
 	IMongoDatabase database;

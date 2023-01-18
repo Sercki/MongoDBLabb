@@ -1,7 +1,4 @@
-﻿
-using System.Runtime.CompilerServices;
-
-internal class InventoryController
+﻿internal class InventoryController
 {
 	IStringIO io;
 	IEquipmentDAO itemDAO;
@@ -13,24 +10,16 @@ internal class InventoryController
 
 	public void Start()
 	{
-		//loop
 		while (true)
 		{
 			MainMenu();
 		}
-		//itemDAO.GetAllItems().ForEach(product => { io.PrintString(product); });
-
-		//string title;
-		//string description;
-		//int amount;
-		////lägga till
-		//itemDAO.CreateItem();
 	}
 	private void MainMenu()
 	{
 		io.PrintString("==== Sport's equipment library ====\nActive User:ADMIN\n\n1. Register a donated item(Add a new product)\n2. Show all items.\n3. Show all items of one type\n4. Change status of equipment(available or borrowed)." +
 			"\n5. Erase item from database.\n6. Exit program.\nPlease select one of the alternatives:");
-		bool success = int.TryParse(io.GetString(), out int input);                                     //sprawdzic czy nie wywali bledu jak wstawie litere zamiast cyfry w menu
+		bool success = int.TryParse(io.GetString(), out int input);                                     
 		if (success == true)
 		{
 			switch (input)
@@ -51,13 +40,17 @@ internal class InventoryController
 					DeleteEquipment();
 					break;
 				case 6:
-					io.Exit();
 					io.PrintString("Shutting down!");
+					io.Exit();					
 					break;
 				default:
-					io.PrintString("Wrong choice! Please select numbers 1-6\n");
+					io.PrintString("Wrong choice! Please select numbers 1-6.\n");
 					break;
 			}
+		}
+		else
+		{
+			io.PrintString("Wrong input! Try numbers only!\n");
 		}
 	}
 	private void AddEquipment()         //en metod för att lägga till en ny produkt i en databas
@@ -71,26 +64,25 @@ internal class InventoryController
 		string description = io.GetString();
 		var document = new BsonDocument
 		{
-			{"shelf", $"{shelfID}" },			//som index - varje utrustning har sin egen "shelf id" - Tänk om hylla A med krokar 1,2,3,4 etc..., hylla b med hyllfack 1,2,3,4 etc... inga hyllor innehåller mer än en utrustning
-			{"name", $"{name}" },
-			{"description", $"{description}" },
-			{"is available", $"{isAvailable}"  }
+			{"shelf", shelfID },			//som index - varje utrustning har sin egen "shelf id" - Tänk om hylla A med krokar 1,2,3,4 etc..., hylla b med hyllfack 1,2,3,4 etc... inga hyllor innehåller mer än en utrustning
+			{"name", name },
+			{"description", description },
+			{"is available", isAvailable  }
 		};
 		itemDAO.CreateItem(document);
-		io.PrintString($"shelf: {shelfID}\nname: {name}\ndescription: {description}\navailable: {isAvailable}\nSport equipment was succesfully added!");
+		io.PrintString($"shelf: {shelfID}\nname: {name}\ndescription: {description}\navailable: {isAvailable}\nSport equipment was succesfully added!\n");
 	}
-	private void ShowAll()
+	private void ShowAll()      //en metod för att visa hela sortimentet i "idrottsbibliotek"
 	{
 		itemDAO.GetAllItems().ForEach(item => io.PrintString(item.ToString()));
 	}
-	private void ShowAllwithfilter()
+	private void ShowAllwithfilter()    //en metod för att visa en del av sortimentet i "idrottsbibliotek"
 	{
 		io.PrintString("What are you looking for? Please write name of the equipment");
 		string equipmentName = io.GetString();
 		itemDAO.GetAllItemsWithFilter("name", equipmentName).ForEach(item => io.PrintString(item.ToString()));
-
 	}
-	private void LendOrReturnequipment()
+	private void LendOrReturnequipment()	//en implementation av update metod (man för endast byta "isAvailable")
 	{
 		io.PrintString("Press \"1\" to lend or \"2\" to register return of an equipment.");
 		int input = 0;
@@ -117,11 +109,13 @@ internal class InventoryController
 		io.PrintString($"Your Choice: {choice}\nPlease write equipments location(shelf ID)?");
 		string location = io.GetString();
 		itemDAO.UpdateItem("shelf", location, "is available", availability);
+		io.PrintString($"Equipment status succesfully changed!\n");
 	}
-	private void DeleteEquipment()
+	private void DeleteEquipment()	//en metod för att radera utrustning från en databas
 	{
 		io.PrintString($"Please write equipments location(shelf ID)?");
 		string location = io.GetString();
-		itemDAO.DeleteItem("shelf", location);	
+		itemDAO.DeleteItem("shelf", location);
+		io.PrintString($"Equipment removed from database!\n");
 	}
 }

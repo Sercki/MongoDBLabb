@@ -1,11 +1,5 @@
-﻿
-internal class TraditionalTextIO : IStringIO
+﻿internal class TraditionalTextIO : IStringIO
 {
-	public void Clear()
-	{
-		//behövs inte i den här implementation
-	}
-
 	public void Exit()
 	{
 		System.Environment.Exit(0);
@@ -17,10 +11,24 @@ internal class TraditionalTextIO : IStringIO
 		string textInput = "";
 		while (check == true)
 		{
-			textInput = Console.ReadLine();
+			try
+			{
+				textInput = Console.ReadLine();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+			}
 			if (textInput == "")
 			{
-				Console.WriteLine("Sorry! You wrote nothing here. Please add at least one symbol.Try again!");
+				try
+				{
+					Console.WriteLine("Sorry! You wrote nothing here. Please add at least one symbol.Try again!");
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine($"Oops! Don't worry, just send this to your programmer: {e}");
+				}
 			}
 			else
 			{
@@ -28,27 +36,16 @@ internal class TraditionalTextIO : IStringIO
 			}
 		}
 		return textInput;
-		//public int CheckNumberInput()					//en metod fär att kolla om användaren skriver siffror
-		//	{
-		//		bool checkIfNumberInput = false;
-		//		int value = -1;
-		//		while (checkIfNumberInput == false)
-		//		{
-		//			bool checkInput = int.TryParse(Console.ReadLine(), out value);
-		//			if (checkInput == false)
-		//			{
-		//				Console.WriteLine("Wrong input! Write just numbers please:");
-		//			}
-		//			else
-		//			{
-		//				checkIfNumberInput = true;
-		//			}
-		//		}
-		//		return value;
-		//	}
 	}
-	public void PrintString(string output)
+	public void PrintString(string output)      //en metod för att skriva ut text
 	{
-		Console.WriteLine(output);
+		try
+		{
+			Console.WriteLine(output);
+		}
+		catch (Exception)
+		{
+			Console.WriteLine("Oops! Something went wrong."); 
+		}
 	}
 }
